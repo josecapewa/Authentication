@@ -1,0 +1,7 @@
+{
+    "name": "lenovo/authorization",
+    "require": {
+        "phpoffice/phpspreadsheet": "^2.2",
+        "ark4ne/xl-reader": "^1.0"
+    }
+}
