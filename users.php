@@ -3,12 +3,8 @@
   page_require_level(1);
 ?>
 <?php
-
-$sql = "SELECT u.id,u.image,u.name,u.email,u.recuperation_email,u.password,u.user_level, u.auth,l.level_name FROM user u LEFT JOIN user_level l ON l.number=u.user_level ORDER BY u.name ASC";
-        $result = $db->query($sql);
-        $set_result = $db->while_loop($result);
     
-    $all_users = $set_result;
+    $all_users = find_all_user();
 
     if(isset($_POST['search-button'])){
       $search = isset($_POST['search']) ? $_POST['search'] : '';
