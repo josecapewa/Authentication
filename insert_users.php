@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $rowCount = 0;
 
       foreach ($reader->read() as $row => $value) {
+        
+      if (!empty($a_user['A']) && !empty($a_user['B'])):
         $rowCount++;
         if ($row > 1 ) {
           $all_users[] = $value;
@@ -70,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
           }
         }
+      endif;
       }
     }
     unlink($filePath);
@@ -81,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (isset($_POST['insert'])) {
     foreach ($_SESSION['all_users'] as $a_user) {
+      if (!empty($a_user['A']) && !empty($a_user['B'])):
       $checkEmailQuery = "SELECT id FROM user WHERE email = '$a_user[$emailColumn]'";
       $result = $db->query($checkEmailQuery);
 
@@ -99,6 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $session->msg("d", "Erro ao criar usuário. Tente novamente.");
         }
       }
+      
+  endif;
     }
   }
 
