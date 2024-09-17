@@ -1,16 +1,7 @@
 <?php
-// function sanitizeFilePath($filePath)
-// {
-//   // Substitui barras invertidas (\) por barras normais (/)
-//   $filePath = str_replace("\\", "/", $filePath);
-
-//   // Remove aspas duplas se houver
-//   $filePath = trim($filePath, '"');
-
-//   return $filePath;
-// }
 require_once("vendor/autoload.php");
 require_once("load.php");
+page_require_level(1);
 
 
 $nameColumn = "A";
@@ -49,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
           $size = sizeof($value);
           if ($size == 5) {
-            $profilePicture = "uploads/no_image.jpg";
             if (filter_var($value[$emailColumn], FILTER_VALIDATE_EMAIL) || filter_var($value[$recuperation_email], FILTER_VALIDATE_EMAIL)) {
               if ($value[$user_level] == "admin" || $value[$user_level] == "nivel 1" || $value[$user_level] == "nivel 2") {
                 $userRole = $value[$user_level] == "admin" ? 1 : ($value[$user_level] == "level2" ? 2 : ($value[$user_level] == "level3" ? 3 : ""));
@@ -57,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $checkEmailQuery = "SELECT id FROM user WHERE email = '$value[$emailColumn]'";
                 $result = $db->query($checkEmailQuery);
-
+                $all_users[$value['F']] = $db->num_rows($result) ? true : false;
+                
 
                 /* if ($db->num_rows($result)) {
                   $session->msg("d","Já existe um usuário com o mesmo email!" . $value);
@@ -87,7 +78,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       header("Location: users.php");
     }
   }
+
+  if (isset($_POST['insert'])) {
+    foreach ($all_users as $a_user) {
+      if ($a_user['F']) {
+        $session->msg("d", "Já existe um usuário com o mesmo email!" . $a_user);
+        header("Location: users.php");
+      } else {
+        $new_password = $passwordColumn;
+        $insertQuery = "INSERT INTO user (name, email, recuperation_email, password, user_level) values('$a_user[$nameColumn]', '$a_user[$emailColumn]', '$a_user[$recuperation_email]', '$a_user[$passwordColumn]', '$userRole')";
+
+        if ($result = $db->query($insertQuery)) {
+          $session->msg("s", "Usuários carregados com sucesso");
+          header("Location: users.php");
+        } else {
+          $session->msg("d", "Erro ao criar usuário. Tente novamente.");
+        }
+      }
+    }
+  }
+
 }
+
+$_SESSION['all_users'] = $all_users;
 ?>
 
 <?php
@@ -116,12 +129,12 @@ include('layouts/header.php');
           </form>
         </div>
       </div>
-      </div>
-      </div>
-      <div class="panel-body">
-        <?php
+    </div>
+  </div>
+  <div class="panel-body">
+    <?php
 
-        echo "<table class=\"table table-bordered table-striped\">
+    echo "<table class=\"table table-bordered table-striped\">
   <thead>
       <tr>
           <th>Nome </th>
@@ -132,8 +145,8 @@ include('layouts/header.php');
       </tr>
   </thead>
   <tbody id=\"result\">";
-        foreach ($all_users as $a_user):
-          echo "    <tr>
+    foreach ($all_users as $a_user):
+      echo "    <tr " .  ($a_user['F']) ?  "style=\"background-color: red;\" "  : "; ?>>>
           <td> " . $a_user['A'] . "</td>
           <td> " . $a_user['B'] . " </td>
           <td> " . $a_user['C'] . "</td>
@@ -141,9 +154,16 @@ include('layouts/header.php');
           <td class=\"text-center\"> " . $a_user['E'] . "</td>
           
       </tr>";
-        endforeach;
-        echo " </tbody>
+    endforeach;
+    echo " </tbody>
 </table>"; ?>
 
+  </div>
+  <form action="insert_users.php" method="POST" enctype="multipart/form-data" class="clearfix">
+    <div class="form-group">
+      <div class="input-group">
+        <input type="text" hidden name="">
+        <button type="submit" name="insert" class="btn btn-info">Carregar Ficheiro</button>
       </div>
-        <?php include('layouts/footer.php'); ?>
+  </form>
+  <?php include('layouts/footer.php'); ?>
