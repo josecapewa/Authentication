@@ -80,40 +80,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         }
       }
-}
-unlink($filePath);
-if ($rowCount == 0) {
-  $session->msg("d", "O ficheiro Excel está vazio!");
-  header("Location: users.php");
-}
-}
+    }
+    unlink($filePath);
+    if ($rowCount == 0) {
+      $session->msg("d", "O ficheiro Excel está vazio!");
+      header("Location: users.php");
+    }
   }
+}
 ?>
 
 <?php
 include('layouts/header.php');
 ?>
 
-<main class="main-content">
-  <section class="col-md-4">
-    <h2>Informações dos Usuários</h2>
-    <form action="insert_users.php" method="POST" enctype="multipart/form-data" class="clearfix">
-      <p style="margin: 10px 0px;"><strong>Atenção: </strong>Se algum usuário não tiver todos os campos preenchidos, não
-        será cadastrado!</p>
-      <div class="form-group">
-        <div class="input-group">
-          <label for="profile_picture">Ficheiro excel (xlsx ou csv)</label>
-          <div class="input-group">
-            <input type="file" class="form-control" id="users" name="users" accept=".xlsx, .xls">
-            <span class="input-group-btn">
-              <button type="submit" name="preview" class="btn btn-info">Carregar Ficheiro</button>
-            </span>
-          </div>
-    </form>
-  </section>
-  <?php
-  
-  echo "<table class=\"table table-bordered table-striped\">
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading clearfix">
+        <strong>
+          <span class="glyphicon glyphicon-th"></span>
+          <span>Usuários a serem cadastrados</span>
+        </strong>
+        <div class="btn-group pull-right">
+          <form action="insert_users.php" method="POST" enctype="multipart/form-data" class="clearfix">
+            <div class="form-group">
+              <div class="input-group">
+                <label for="profile_picture">Ficheiro excel (xlsx)</label>
+                <div class="input-group">
+                  <input type="file" class="form-control" id="users" name="users" accept=".xlsx, .xls">
+                  <span class="input-group-btn">
+                    <button type="submit" name="preview" class="btn btn-info">Carregar Ficheiro</button>
+                  </span>
+                </div>
+          </form>
+        </div>
+      </div>
+      <div class="panel-body">
+        <?php
+
+        echo "<table class=\"table table-bordered table-striped\">
   <thead>
       <tr>
           <th>Nome </th>
@@ -124,8 +130,8 @@ include('layouts/header.php');
       </tr>
   </thead>
   <tbody id=\"result\">";
-foreach ($all_users as $a_user):
-echo "    <tr>
+        foreach ($all_users as $a_user):
+          echo "    <tr>
           <td> " . $a_user['A'] . "</td>
           <td> " . $a_user['B'] . " </td>
           <td> " . $a_user['C'] . "</td>
@@ -133,8 +139,8 @@ echo "    <tr>
           <td class=\"text-center\"> " . $a_user['E'] . "</td>
           
       </tr>";
-endforeach;
-echo " </tbody>
-</table>";?>
-</main>
-<?php include('layouts/footer.php'); ?>
+        endforeach;
+        echo " </tbody>
+</table>"; ?>
+        </main>
+        <?php include('layouts/footer.php'); ?>
