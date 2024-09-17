@@ -119,7 +119,6 @@ if ($rowCount == 0) {
   header("Location: users.php");
 }
 }
-header("Location: users.php");
   }
 ?>
 
