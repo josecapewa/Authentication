@@ -142,5 +142,8 @@ include('layouts/header.php');
         endforeach;
         echo " </tbody>
 </table>"; ?>
-        </main>
+
+      </div>
+      </div>
+      </div>
         <?php include('layouts/footer.php'); ?>
