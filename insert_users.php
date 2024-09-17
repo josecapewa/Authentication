@@ -35,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       foreach ($reader->read() as $row => $value) {
         $rowCount++;
-        if ($row > 1) {
+        if ($row > 1 ) {
           $all_users[] = $value;
 
           $size = sizeof($value);
           if ($size == 5) {
-            if (filter_var($value[$emailColumn], FILTER_VALIDATE_EMAIL) || filter_var($value[$recuperation_email], FILTER_VALIDATE_EMAIL)) {
+            if (filter_var($value[$emailColumn], FILTER_VALIDATE_EMAIL) || filter_var($value[$recuperation_email], FILTER_VALIDATE_EMAIL) ) {
               if ($value[$user_level] == "admin" || $value[$user_level] == "nivel 1" || $value[$user_level] == "nivel 2") {
                 $userRole = $value[$user_level] == "admin" ? 1 : ($value[$user_level] == "level2" ? 2 : ($value[$user_level] == "level3" ? 3 : ""));
 
@@ -88,6 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $session->msg("d", "Já existe um usuário com o mesmo email!" . $a_user[$emailColumn]);
         header("Location: users.php");
       } else {
+        
+        $userRole = $a_user[$user_level] == "admin" ? 1 : ($a_user[$user_level] == "level2" ? 2 : ($a_user[$user_level] == "level3" ? 3 : ""));
         $insertQuery = "INSERT INTO user (name, email, recuperation_email, password, user_level) values('$a_user[$nameColumn]', '$a_user[$emailColumn]', '$a_user[$recuperation_email]', '$a_user[$passwordColumn]', '$userRole')";
 
         if ($result = $db->query($insertQuery)) {
@@ -148,6 +150,7 @@ include('layouts/header.php');
   </thead>
   <tbody id=\"result\">";
     foreach ($all_users as $a_user):
+      if (!empty($a_user['A']) && !empty($a_user['B'])):
       echo "<tr " . ($a_user['F'] ? 'style="background-color: red;"' : '') . ">
         <td> " . $a_user['A'] . "</td>
         <td> " . $a_user['B'] . " </td>
@@ -155,6 +158,7 @@ include('layouts/header.php');
         <td> " . $a_user['C'] . "</td>
         <td class=\"text-center\"> " . $a_user['E'] . "</td>
     </tr>";
+  endif;
     endforeach;
 
     echo " </tbody>
