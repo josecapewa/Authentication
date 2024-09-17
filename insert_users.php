@@ -117,6 +117,7 @@ include('layouts/header.php');
         </div>
       </div>
       </div>
+      </div>
       <div class="panel-body">
         <?php
 
@@ -144,6 +145,5 @@ include('layouts/header.php');
         echo " </tbody>
 </table>"; ?>
 
-      </div>
       </div>
         <?php include('layouts/footer.php'); ?>
