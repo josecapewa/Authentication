@@ -116,6 +116,7 @@ include('layouts/header.php');
           </form>
         </div>
       </div>
+      </div>
       <div class="panel-body">
         <?php
 
@@ -143,7 +144,6 @@ include('layouts/header.php');
         echo " </tbody>
 </table>"; ?>
 
-      </div>
       </div>
       </div>
         <?php include('layouts/footer.php'); ?>
