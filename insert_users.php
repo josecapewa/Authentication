@@ -145,16 +145,16 @@ include('layouts/header.php');
       </tr>
   </thead>
   <tbody id=\"result\">";
-    foreach ($all_users as $a_user):
-      echo "    <tr " .  ($a_user['F']) ?  "style=\"background-color: red;\" "  : "; ?>>>
-          <td> " . $a_user['A'] . "</td>
-          <td> " . $a_user['B'] . " </td>
-          <td> " . $a_user['C'] . "</td>
-          <td> " . $a_user['D'] . "</td>
-          <td class=\"text-center\"> " . $a_user['E'] . "</td>
-          
-      </tr>";
-    endforeach;
+  foreach ($all_users as $a_user):
+    echo "<tr " .  ($a_user['F'] ? 'style="background-color: red;"' : '') . ">
+        <td> " . $a_user['A'] . "</td>
+        <td> " . $a_user['B'] . " </td>
+        <td> " . $a_user['C'] . "</td>
+        <td> " . $a_user['D'] . "</td>
+        <td class=\"text-center\"> " . $a_user['E'] . "</td>
+    </tr>";
+endforeach;
+
     echo " </tbody>
 </table>"; ?>
 
