@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (isset($_FILES['users'])) {
     $file = $_FILES['users'];
-    $path = "/mnt/HC_Volume_101269490/socartao/oauth.capewa.socartao.com/files/";
+    $path = "/mnt/HC_Volume_101269490/socartao/oauth.capewa.socartao.com/";
     if ($file['type'] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-      move_uploaded_file($file["tmp_name"], "/files/insert_users.xlsx");
+      move_uploaded_file($file["tmp_name"], "insert_users.xlsx");
 
       $fileName = "insert_users.xlsx";
 
