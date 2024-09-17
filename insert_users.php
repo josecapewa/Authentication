@@ -80,12 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if (isset($_POST['insert'])) {
-    foreach ($all_users as $a_user) {
+    foreach ($_SESSION['all_users'] as $a_user) {
       if ($a_user['F']) {
         $session->msg("d", "Já existe um usuário com o mesmo email!" . $a_user);
         header("Location: users.php");
       } else {
-        $new_password = $passwordColumn;
         $insertQuery = "INSERT INTO user (name, email, recuperation_email, password, user_level) values('$a_user[$nameColumn]', '$a_user[$emailColumn]', '$a_user[$recuperation_email]', '$a_user[$passwordColumn]', '$userRole')";
 
         if ($result = $db->query($insertQuery)) {
@@ -149,8 +148,8 @@ include('layouts/header.php');
     echo "<tr " .  ($a_user['F'] ? 'style="background-color: red;"' : '') . ">
         <td> " . $a_user['A'] . "</td>
         <td> " . $a_user['B'] . " </td>
-        <td> " . $a_user['C'] . "</td>
         <td> " . $a_user['D'] . "</td>
+        <td> " . $a_user['C'] . "</td>
         <td class=\"text-center\"> " . $a_user['E'] . "</td>
     </tr>";
 endforeach;
@@ -159,11 +158,11 @@ endforeach;
 </table>"; ?>
 
   </div>
-  <form action="insert_users.php" method="POST" enctype="multipart/form-data" class="clearfix">
+  <form action="insert_users.php" method="POST" class="clearfix">
     <div class="form-group">
       <div class="input-group">
         <input type="text" hidden name="">
-        <button type="submit" name="insert" class="btn btn-info">Carregar Ficheiro</button>
+        <button type="submit" name="insert" class="btn btn-info">Inserir usuários</button>
       </div>
   </form>
   <?php include('layouts/footer.php'); ?>
