@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       foreach ($reader->read() as $row => $value) {
         
-      if (!empty($a_user['A']) && !empty($a_user['B'])):
+      if (!empty($value['A']) && !empty($value['B'])):
         $rowCount++;
         if ($row > 1 ) {
           $all_users[] = $value;
