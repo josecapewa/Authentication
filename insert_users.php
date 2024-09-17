@@ -118,9 +118,9 @@ if ($rowCount == 0) {
   $session->msg("d", "O ficheiro Excel está vazio!");
   header("Location: users.php");
 }
-  }}
+}
 header("Location: users.php");
-
+  }
 ?>
 
 <?php
