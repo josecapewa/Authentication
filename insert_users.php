@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (isset($_POST['insert'])) {
     foreach ($_SESSION['all_users'] as $a_user) {
-      $checkEmailQuery = "SELECT id FROM user WHERE email = '$value[$emailColumn]'";
+      $checkEmailQuery = "SELECT id FROM user WHERE email = '$a_user[$emailColumn]'";
       $result = $db->query($checkEmailQuery);
 
       if ($db->num_rows($result)) {
