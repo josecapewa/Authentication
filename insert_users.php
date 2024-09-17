@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $checkEmailQuery = "SELECT id FROM user WHERE email = '$value[$emailColumn]'";
                 $result = $db->query($checkEmailQuery);
                 $all_users[$value['F']] = $db->num_rows($result) ? true : false;
-                
+
 
                 /* if ($db->num_rows($result)) {
                   $session->msg("d","Já existe um usuário com o mesmo email!" . $value);
@@ -81,8 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (isset($_POST['insert'])) {
     foreach ($_SESSION['all_users'] as $a_user) {
-      if ($a_user['F']) {
-        $session->msg("d", "Já existe um usuário com o mesmo email!" . $a_user);
+      $checkEmailQuery = "SELECT id FROM user WHERE email = '$value[$emailColumn]'";
+      $result = $db->query($checkEmailQuery);
+
+      if ($db->num_rows($result)) {
+        $session->msg("d", "Já existe um usuário com o mesmo email!" . $a_user[$emailColumn]);
         header("Location: users.php");
       } else {
         $insertQuery = "INSERT INTO user (name, email, recuperation_email, password, user_level) values('$a_user[$nameColumn]', '$a_user[$emailColumn]', '$a_user[$recuperation_email]', '$a_user[$passwordColumn]', '$userRole')";
@@ -144,15 +147,15 @@ include('layouts/header.php');
       </tr>
   </thead>
   <tbody id=\"result\">";
-  foreach ($all_users as $a_user):
-    echo "<tr " .  ($a_user['F'] ? 'style="background-color: red;"' : '') . ">
+    foreach ($all_users as $a_user):
+      echo "<tr " . ($a_user['F'] ? 'style="background-color: red;"' : '') . ">
         <td> " . $a_user['A'] . "</td>
         <td> " . $a_user['B'] . " </td>
         <td> " . $a_user['D'] . "</td>
         <td> " . $a_user['C'] . "</td>
         <td class=\"text-center\"> " . $a_user['E'] . "</td>
     </tr>";
-endforeach;
+    endforeach;
 
     echo " </tbody>
 </table>"; ?>
