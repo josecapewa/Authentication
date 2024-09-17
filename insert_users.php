@@ -80,38 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         }
       }
-      echo "<table class=\"table table-bordered table-striped\">
-                  <thead>
-                      <tr>
-                          <th class=\"text-center\" style=\"width: 50px;\">#</th>
-                          <th>Identificação </th>
-                          <th>Foto </th>
-                          <th>Nome </th>
-                          <th>Email</th>
-                          <th>Email de Recuperação</th>
-                          <th>Password</th>
-                          <th class=\"text-center\">Nível de Usuário</th>
-                          <th class=\"text-center\">Verificação de dois factores</th>
-                          <th>BI (Frente) </th>
-                          <th>BI (Verso) </th>
-                          <th class=\"text-center\" style=\"width: 100px;\">Ações</th>
-                      </tr>
-                  </thead>
-                  <tbody id=\"result\">";
-    foreach ($all_users as $a_user):
-      echo "    <tr>
-                          <td class=\"text-center\"> " . $a_user['id'] . "</td>
-                          <td> " . $a_user['name'] . "</td>
-                          <td> " . $a_user['email'] . " </td>
-                          <td> " . $a_user['recuperation_email'] . "</td>
-                          <td> " . $a_user['password'] . "</td>
-                          <td class=\"text-center\"> " . $a_user['level_name'] . "</td>
-                          
-                      </tr>";
-    endforeach;
-    echo " </tbody>
-              </table>";
-
 }
 unlink($filePath);
 if ($rowCount == 0) {
@@ -143,5 +111,30 @@ include('layouts/header.php');
           </div>
     </form>
   </section>
+  <?php
+  
+  echo "<table class=\"table table-bordered table-striped\">
+  <thead>
+      <tr>
+          <th>Nome </th>
+          <th>Email</th>
+          <th>Email de Recuperação</th>
+          <th>Password</th>
+          <th class=\"text-center\">Nível de Usuário</th>
+      </tr>
+  </thead>
+  <tbody id=\"result\">";
+foreach ($all_users as $a_user):
+echo "    <tr>
+          <td> " . $a_user['A'] . "</td>
+          <td> " . $a_user['B'] . " </td>
+          <td> " . $a_user['C'] . "</td>
+          <td> " . $a_user['D'] . "</td>
+          <td class=\"text-center\"> " . $a_user['E'] . "</td>
+          
+      </tr>";
+endforeach;
+echo " </tbody>
+</table>";?>
 </main>
 <?php include('layouts/footer.php'); ?>
