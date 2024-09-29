@@ -3,7 +3,7 @@ name: Auto Generate README
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch: # Permite que o workflow seja disparado manualmente
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests openai  # Certifique-se de instalar 'openai'
+          pip install requests openai chardet  # Inclui chardet para detecção de encoding
 
       - name: Read files and generate README
         run: |
