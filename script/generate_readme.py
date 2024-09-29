@@ -21,7 +21,7 @@ def list_files_in_repository(repo_path='.'):
     for root, dirs, filenames in os.walk(repo_path):
         for filename in filenames:
             # Ignorar arquivos que não são de interesse (por exemplo, binários)
-            if not filename.endswith(('.php', '.md', '.js'), '.css'):  # Adicione extensões que deseja processar
+            if not filename.endswith(('.php', '.md', '.js', '.css')):  # Adicione extensões que deseja processar
                 continue
             files.append(os.path.join(root, filename))
     return files
