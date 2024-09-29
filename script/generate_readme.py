@@ -1,48 +1,57 @@
 import os
-import openai  # ou outra API que preferir
-import requests
+import openai
+import chardet
 
-# Configurações da API da IA (exemplo OpenAI)
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Função para detectar a codificação do arquivo e lê-lo corretamente
+def read_file_content(file_path):
+    """Detecta a codificação do arquivo e lê seu conteúdo."""
+    with open(file_path, 'rb') as file:  # Abrir em modo binário
+        raw_data = file.read()
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
 
+    # Ler o arquivo com a codificação detectada, ignorando erros
+    with open(file_path, 'r', encoding=encoding, errors='ignore') as file:
+        return file.read()
+
+# Função para listar todos os arquivos do repositório, filtrando por extensões relevantes
 def list_files_in_repository(repo_path='.'):
-    """Lista todos os arquivos no repositório."""
+    """Lista todos os arquivos relevantes no repositório."""
     files = []
     for root, dirs, filenames in os.walk(repo_path):
         for filename in filenames:
-            if filename.endswith('.php') or filename.endswith('.md'):  # Escolha extensões relevantes
-                files.append(os.path.join(root, filename))
+            # Ignorar arquivos que não são de interesse (por exemplo, binários)
+            if not filename.endswith(('.php', '.md', '.js'), '.css'):  # Adicione extensões que deseja processar
+                continue
+            files.append(os.path.join(root, filename))
     return files
 
-def read_file_content(file_path):
-    """Lê o conteúdo de um arquivo."""
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return file.read()
-
+# Função para gerar o conteúdo do README.md com base nos arquivos lidos
 def generate_readme_content(files):
-    """Gera o conteúdo do README.md usando uma IA."""
+    """Gera o conteúdo do README.md usando a OpenAI."""
     files_content = "\n\n".join([f"### {file}\n\n{read_file_content(file)}" for file in files])
-
-    # Use a API de IA para gerar o conteúdo do README
+    
+    # Chamada à API OpenAI para gerar o conteúdo do README.md
+    prompt = f"Leia os seguintes arquivos e gere uma documentação apropriada para um README.md:\n\n{files_content}"
     response = openai.Completion.create(
-        model="text-davinci-003",  # Exemplo usando o GPT-3 da OpenAI
-        prompt=f"Baseado nos seguintes arquivos de código, crie um README.md detalhado:\n\n{files_content}",
-        max_tokens=1500
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=2048  # Ajustar conforme necessário
     )
 
-    return response['choices'][0]['text']
+    return response.choices[0].text.strip()
 
-def save_readme(content, filename='README.md'):
-    """Salva o conteúdo gerado no arquivo README.md."""
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write(content)
-
+# Função principal
 if __name__ == "__main__":
-    # Lista todos os arquivos no repositório
+    # Certifique-se de definir a variável de ambiente OPENAI_API_KEY no GitHub Secrets
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    # Listar os arquivos no repositório
     repo_files = list_files_in_repository()
 
-    # Gera o conteúdo do README usando IA
+    # Gerar o conteúdo do README.md
     readme_content = generate_readme_content(repo_files)
 
-    # Salva o novo README.md
-    save_readme(readme_content)
+    # Escrever o conteúdo gerado no README.md
+    with open("README.md", "w", encoding="utf-8") as readme_file:
+        readme_file.write(readme_content)
