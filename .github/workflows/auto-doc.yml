@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-  workflow_dispatch: # Permite que o workflow seja disparado manualmente
+  workflow_dispatch:
 
 jobs:
   generate-docs:
@@ -22,9 +22,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests openai chardet  # Inclui openai e chardet
+          pip install requests openai chardet
 
       - name: Read files and generate README
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # Passando a chave do GitHub Secrets
         run: |
           python script/generate_readme.py
 
