@@ -21,25 +21,29 @@ def list_files_in_repository(repo_path='.'):
     for root, dirs, filenames in os.walk(repo_path):
         for filename in filenames:
             # Ignorar arquivos que não são de interesse (por exemplo, binários)
-            if not filename.endswith(('.php', '.md', '.js', '.css')):  # Adicione extensões que deseja processar
+            if not filename.endswith(('.php', '.md', '.txt', '.js', '.css')):  # Adicione extensões que deseja processar
                 continue
             files.append(os.path.join(root, filename))
     return files
 
-# Função para gerar o conteúdo do README.md com base nos arquivos lidos
+# Função para gerar o conteúdo do README.md usando a nova API OpenAI
 def generate_readme_content(files):
     """Gera o conteúdo do README.md usando a OpenAI."""
     files_content = "\n\n".join([f"### {file}\n\n{read_file_content(file)}" for file in files])
     
-    # Chamada à API OpenAI para gerar o conteúdo do README.md
+    # Chamada à nova API OpenAI para gerar o conteúdo do README.md
     prompt = f"Leia os seguintes arquivos e gere uma documentação apropriada para um README.md:\n\n{files_content}"
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=2048  # Ajustar conforme necessário
+    
+    response = openai.chat_completions.create(
+        model="gpt-3.5-turbo",  # ou "gpt-4" se estiver disponível para você
+        messages=[
+            {"role": "system", "content": "Você é um assistente que cria documentações."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=2048  # Ajuste conforme necessário
     )
 
-    return response.choices[0].text.strip()
+    return response['choices'][0]['message']['content'].strip()
 
 # Função principal
 if __name__ == "__main__":
