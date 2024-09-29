@@ -35,7 +35,7 @@ def generate_readme_content(files):
     prompt = f"Leia os seguintes arquivos e gere uma documentação apropriada para um README.md:\n\n{files_content}"
     
     # Usando a nova API de chat completions
-    response = openai..chat.completions.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",  # ou "gpt-4" se estiver disponível
         messages=[
             {"role": "system", "content": "Você é um assistente que cria documentações."},
